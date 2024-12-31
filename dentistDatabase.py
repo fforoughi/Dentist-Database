@@ -15,8 +15,8 @@ except Exception as e:
     
 #Connecting to mysql
 try:
-    db_command_handler.execute("DROP DATABASE SmileDatabase") #Drop an already created database
-    db_command_handler.execute("CREATE DATABASE SmileDatabase")
+    db_command_handler.execute("DROP DATABASE KeepSmilingDatabase") #Drop an already created database
+    db_command_handler.execute("CREATE DATABASE KeepSmilingDatabase")
     print("Dentist database has been created")
 except Exception as e:
     print("Could not create database")
@@ -24,10 +24,10 @@ except Exception as e:
 
 #Connecting to SmileDatabase
 try:
-    db1 = mysql.connect(host=host,user=user,password=password,database = "SmileDatabase")
+    db1 = mysql.connect(host=host,user=user,password=password,database = "KeepSmilingDatabase")
     print("Connected Successfully")
 except Exception as e:
-    print("Could not connect to SmileDatabase Server")
+    print("Could not connect to KeepSmilingDatabase Server")
     print(e)
     
 #Adding tables
@@ -48,6 +48,55 @@ try:
 except Exception as e:
     print("Table could not be created")
     print(e)
+
+#User Interactive Interface
+end = False
+mainMenuOption = 0
+while(end != True):
+
+    # try:
+        print("Welcome to KeepSmiling Dentist Office Database Server Main Menu, what would you like to do?")
+        print("Type 1 for Dentist Related Actions, Type 2 for Patient Related Actions, Type 3 for Appointment Related Actions, Type 4 for Database Related Actions")
+        mainMenuOption = int(input("Enter your choice here: "))
+        if(mainMenuOption == 1):
+            print("Welcome to the Dentist Specifc Actions, what would you like to do?")
+            print("Type 1 to Hire a Dentist, Type 2 to Fire a Dentist, Type 3 for displaying the Dentist's information, Type 4 for displaying all hired dentists")
+            dentistOption = int(input("Enter your choice here: "))
+            if(dentistOption == 1):
+                continues = True
+                while(continues != False):
+                    dentistID =  input("Input Dentist ID: ")
+                    dentistName = input("Input Dentist Full Name (First name followed by last name with space inbetween): ")
+                    hiredDate = input("Input the date they were hired: ")
+                    query = "INSERT INTO Dentist(DentistID,DentistName,HiredDate) VALUES (%s,%s,%s)"
+                    query_vals = (dentistID,dentistName,hiredDate)
+                    db1_command_handler.execute(query,query_vals)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record inserted")
+                    print("Would you like to add more? say 1 for yes and say 2 for no")
+                    decision = int(input("Answer: "))
+                    if(decision == 2):
+                        continues = False
+            elif(dentistOption == 2):
+                query = "DELETE FROM Dentist WHERE DentistID = %s"
+                query_val = input("Enter Dentist ID here: ")
+                db1_command_handler.execute(query,query_val)
+                results = db1_command_handler.fetchall()
+                print(results)
+            elif(dentistOption == 4):
+                db1_command_handler.execute("SELECT * FROM dentist") 
+                results = db1_command_handler.fetchall()
+                print(results)
+            else:
+                print("Not a valid option, Try Again")
+        else:
+            print("Not a valid option, Try Again")
+    # except Exception as e:
+    #     print("Not a valid option, Try Again")
+    #     print(e)
+    
+
+
 
 #Delete tables and database
 # try:
