@@ -15,7 +15,6 @@ except Exception as e:
     
 #Connecting to mysql
 try:
-    db_command_handler.execute("DROP DATABASE KeepSmilingDatabase") #Drop an already created database
     db_command_handler.execute("CREATE DATABASE KeepSmilingDatabase")
     print("Dentist database has been created")
 except Exception as e:
@@ -56,7 +55,7 @@ while(end != True):
 
     # try:
         print("Welcome to KeepSmiling Dentist Office Database Server Main Menu, what would you like to do?")
-        print("Type 1 for Dentist Related Actions, Type 2 for Patient Related Actions, Type 3 for Appointment Related Actions, Type 4 for Database Related Actions")
+        print("Type 1 for Dentist Related Actions, Type 2 for Patient Related Actions, Type 3 for Appointment Related Actions, Type 4 for Database Related Actions, Type 5 if you would like to exit the database server")
         mainMenuOption = int(input("Enter your choice here: "))
         if(mainMenuOption == 1):
             print("Welcome to the Dentist Specifc Actions, what would you like to do?")
@@ -78,9 +77,14 @@ while(end != True):
                     if(decision == 2):
                         continues = False
             elif(dentistOption == 2):
-                query = "DELETE FROM Dentist WHERE DentistID = %s"
-                query_val = input("Enter Dentist ID here: ")
-                db1_command_handler.execute(query,query_val)
+                query = "DELETE FROM dentist WHERE DentistID = %s"
+                query_val = int(input("Enter Dentist ID here: "))
+                db1_command_handler.execute(query,(query_val,))
+                print("Bye Bye Doctor!")
+            elif(dentistOption == 3):
+                selectQuery = "SELECT * FROM dentist WHERE DentistID = %s"
+                selectQuery_val = input("Enter Dentist ID here: ")
+                db1_command_handler.execute(selectQuery,(selectQuery_val,))
                 results = db1_command_handler.fetchall()
                 print(results)
             elif(dentistOption == 4):
@@ -89,6 +93,14 @@ while(end != True):
                 print(results)
             else:
                 print("Not a valid option, Try Again")
+        elif(mainMenuOption == 5):
+            print("Thanks for using KeepSmiling Dentist Office Database Server, Please come back to use again later! Take Care and keep on smiling :)")
+            db_command_handler.execute("DROP DATABASE KeepSmilingDatabase") #Drop an already created database
+            db_command_handler.close()
+            db.close()
+            db1_command_handler.close()
+            db1.close()
+            end = True
         else:
             print("Not a valid option, Try Again")
     # except Exception as e:
