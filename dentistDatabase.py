@@ -93,9 +93,29 @@ while(end != True):
                 print(results)
             else:
                 print("Not a valid option, Try Again")
+        elif(mainMenuOption == 4):
+            print("Welcome to the Database Specific Actions, What would you like to do?")
+            print("Type 1 for Deleting the Database, Type 2 for Deleting a Table")
+            databaseOption = int(input("Enter your Decision here: "))
+            if(databaseOption == 1):
+                print("WARNING: This action will delete everything in the Database are you sure you want to continue?")
+                deletionRequest = int(input("Enter 1 for yes, 2 for no: "))
+                if(deletionRequest == 1):
+                    print("Please remember that this action can not be reversed and all data will be lost, are you sure you want to delete the database?")
+                    deletionRequest = int(input("Enter 1 for yes, 2 for no: "))
+                    if(deletionRequest == 1):
+                        print("This is your last chance, Please make sure you are 100 percent sure that you are confident with this decision.")
+                        deletionRequest = input("Enter 'KeepSmiling' for confirming deletion of KeepSmiling Dentist Office Database Server: ")
+                        if(deletionRequest == "KeepSmiling"):
+                            print("You have deleted the Database, Have a good day and good bye.")
+                            db_command_handler.execute("DROP DATABASE KeepSmilingDatabase")
+                            db_command_handler.close()
+                            db.close()
+                            db1_command_handler.close()
+                            db1.close()
+                            end = True
         elif(mainMenuOption == 5):
             print("Thanks for using KeepSmiling Dentist Office Database Server, Please come back to use again later! Take Care and keep on smiling :)")
-            db_command_handler.execute("DROP DATABASE KeepSmilingDatabase") #Drop an already created database
             db_command_handler.close()
             db.close()
             db1_command_handler.close()
