@@ -33,7 +33,7 @@ except Exception as e:
 try: 
     db1_command_handler = db1.cursor()
     db1_command_handler.execute("CREATE TABLE Dentist (DentistID INT PRIMARY KEY, DentistName VARCHAR(50),HiredDate DATE)")
-    db1_command_handler.execute("CREATE TABLE Patient(PatientID INT PRIMARY KEY,HealthServiceNumber INT UNIQUE,DateOfBirth DATE,PatientAddress VARCHAR(100),PatientName VARCHAR(50),PatientPhone CHAR(10))")
+    db1_command_handler.execute("CREATE TABLE Patient(PatientID INT PRIMARY KEY,HealthServiceNumber INT UNIQUE,DateOfBirth DATE,PatientAddress VARCHAR(100),PatientName VARCHAR(50),PatientPhone CHAR(12))")
     db1_command_handler.execute("CREATE TABLE PatientRelationship(PatientID INT PRIMARY KEY, Relationship VARCHAR(20), FOREIGN KEY (PatientID) REFERENCES Patient(PatientID))")
     db1_command_handler.execute("CREATE TABLE PatientRelationshipContact(PatientID INT PRIMARY KEY, PatientRelationName VARCHAR(50), PatientRelationPhone VARCHAR(10), FOREIGN KEY (PatientID) REFERENCES Patient(PatientID))")
     db1_command_handler.execute("CREATE TABLE InsuranceProvider(InsuranceIDNumber VARCHAR(20) PRIMARY KEY, InsuranceCompanyName VARCHAR(40), InsuranceProviderLocation VARCHAR(100), InsurancePolicy VARCHAR(100),PatientID INT, FOREIGN KEY (PatientID) REFERENCES Patient(PatientID))")
@@ -59,7 +59,7 @@ while(end != True):
         mainMenuOption = int(input("Enter your choice here: "))
         if(mainMenuOption == 1):
             print("Welcome to the Dentist Specifc Actions, what would you like to do?")
-            print("Type 1 to Hire a Dentist, Type 2 to Fire a Dentist, Type 3 for displaying the Dentist's information, Type 4 for displaying all hired dentists")
+            print("Type 1 to Hire a Dentist, Type 2 to Fire a Dentist, Type 3 for displaying the a specific Dentist's information, Type 4 for displaying all hired dentists")
             dentistOption = int(input("Enter your choice here: "))
             if(dentistOption == 1):
                 continues = True
@@ -93,6 +93,37 @@ while(end != True):
                 print(results)
             else:
                 print("Not a valid option, Try Again")
+        elif(mainMenuOption == 2):
+            print("Welcome to the Patient Specific Actions, What would you like to do?")
+            print("Type 1 for Adding a Patient to the Office, Type 2 for Removing a Patient, Type 3 to Update a Patient's info, Type 4 to list all Patient's in the database, Type 5 for a list of Patients under a specific Dentist, Type 6 for adding a Patient referred by a current patient")
+            patientOption = int(input("Enter your decision here: "))
+            if(patientOption == 1):
+                continues = True
+                while(continues != False):
+                    patientID =  input("Input Patient ID: ")
+                    patientHSN = input("Input Patient's Health Service Number: ")
+                    birthDate = input("Input the Patient's date of birth: ")
+                    patientAddress = input("Input the Patient's full Address: ")
+                    patientName = input("Input Patient's Full Name (First name followed by Last name): ")
+                    patientPhone = input("Input Patient's main phone number: ")
+                    query = "INSERT INTO Patient(PatientID,HealthServiceNumber,DateOfBirth,PatientAddress,PatientName,PatientPhone) VALUES (%s,%s,%s,%s,%s,%s)"
+                    query_vals = (patientID,patientHSN,birthDate,patientAddress,patientName,patientPhone)
+                    db1_command_handler.execute(query,query_vals)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record inserted")
+                    print("Would you like to add more? say 1 for yes and say 2 for no")
+                    decision = int(input("Answer: "))
+                    if(decision == 2):
+                        continues = False
+            elif(patientOption == 2):
+                query = "DELETE FROM Patient WHERE PatientID = %s"
+                query_val = int(input("Enter Patient ID here: "))
+                db1_command_handler.execute(query,(query_val,))
+                print("Thanks for letting us take care of your teeth!")
+            elif(patientOption == 4):
+                db1_command_handler.execute("SELECT * FROM patient") 
+                results = db1_command_handler.fetchall()
+                print(results)
         elif(mainMenuOption == 4):
             print("Welcome to the Database Specific Actions, What would you like to do?")
             print("Type 1 for Deleting the Database, Type 2 for Deleting a Table")
