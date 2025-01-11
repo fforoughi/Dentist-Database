@@ -117,9 +117,53 @@ while(end != True):
                         continues = False
             elif(patientOption == 2):
                 query = "DELETE FROM Patient WHERE PatientID = %s"
-                query_val = int(input("Enter Patient ID here: "))
+                query_val = input("Enter Patient ID here: ")
                 db1_command_handler.execute(query,(query_val,))
                 print("Thanks for letting us take care of your teeth!")
+            elif(patientOption == 3):
+                print("What would you like to update?")
+                print("1 for Health Service Number, 2 for Date of Birth, 3 for Address, 4 for Name, 5 for Phone Number")
+                editOption = int(input("Input answer here: "))
+                if(editOption == 1):
+                    patientid = input("Please enter ID of Patient you want to edit: ")
+                    updatedHSN = input("Enter new Health Service Number for Patient: ")
+                    query = "UPDATE Patient SET HealthServiceNumber = %s WHERE PatientID = %s"
+                    query_values = (updatedHSN,patientid)
+                    db1_command_handler.execute(query,query_values)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record updated")
+                if(editOption == 2):
+                    patientid = input("Please enter ID of Patient you want to edit: ")
+                    updatedDateofBirth = input("Enter new Date of Birth for Patient: ")
+                    query = "UPDATE Patient SET DateOfBirth = %s WHERE PatientID = %s"
+                    query_values = (updatedDateofBirth,patientid)
+                    db1_command_handler.execute(query,query_values)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record updated")
+                if(editOption == 3):
+                    patientid = input("Please enter ID of Patient you want to edit: ")
+                    updatedPatientAddress = input("Enter new Address for Patient: ")
+                    query = "UPDATE Patient SET PatientAddress = %s WHERE PatientID = %s"
+                    query_values = (updatedPatientAddress,patientid)
+                    db1_command_handler.execute(query,query_values)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record updated")
+                if(editOption == 4):
+                    patientid = input("Please enter ID of Patient you want to edit: ")
+                    updatedPatientName = input("Enter new Name for Patient: ")
+                    query = "UPDATE Patient SET PatientName = %s WHERE PatientID = %s"
+                    query_values = (updatedPatientName,patientid)
+                    db1_command_handler.execute(query,query_values)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record updated")
+                if(editOption == 5):
+                    patientid = input("Please enter ID of Patient you want to edit: ")
+                    updatedPhoneNumber = input("Enter new Phone Number for Patient: ")
+                    query = "UPDATE Patient SET PatientPhone = %s WHERE PatientID = %s"
+                    query_values = (updatedPhoneNumber,patientid)
+                    db1_command_handler.execute(query,query_values)
+                    db1.commit()
+                    print(db1_command_handler.rowcount, "record updated")
             elif(patientOption == 4):
                 db1_command_handler.execute("SELECT * FROM patient") 
                 results = db1_command_handler.fetchall()
